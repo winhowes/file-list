@@ -300,6 +300,7 @@ Example:
       if (newName && newName != display.textContent.trim()){
         for(i=0; i < this.files.length; i++) {
           if(this.files[i].name == display.textContent) {
+            display.textContent = newName;
             this.files[i].name = newName;
             this._filesChanged();
             break;
