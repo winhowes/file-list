@@ -118,7 +118,7 @@ Example:
           <span class="nameEdit">
             <input type="text" value="{{item.name}}" on-blur="saveRename" on-keydown="saveRename">
           </span>
-          <span>{{item.kind}}</span>
+          <span>{{item.type}}</span>
           <span>{{item.dateModified}}</span>
           <div class="hidden">
             <paper-button on-click="share">Share</paper-button>
@@ -160,7 +160,7 @@ Example:
       /**
        * An array of file objects:
        *
-       * @type [{preview: string, name: string, kind: string, dateModified: string}, ...]
+       * @type [{preview: string, name: string, type: string, dateModified: string}, ...]
        */
       files: {
         type: Array,
@@ -197,7 +197,7 @@ Example:
       keyword = keyword.trim() || "";
       this._keyword = keyword;
       this._files = this.files.filter(function(item){
-        return item.name.toLowerCase().indexOf(keyword) == 0;
+        return !item.name.toLowerCase().indexOf(keyword) || !item.type.toLowerCase().indexOf(keyword);
       });
     },
     
