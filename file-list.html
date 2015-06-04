@@ -303,6 +303,7 @@ Example:
       }
       display.style.display = 'none';
       edit.style.display = 'inline';
+      edit.children[0].value = display.textContent;
       edit.children[0].focus();
       edit.children[0].select();
     },
