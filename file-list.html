@@ -111,7 +111,7 @@ Example:
 
   <template>
     <paper-material>
-      <template is="dom-repeat" items="{{files}}">
+      <template is="dom-repeat" items="{{_files}}">
         <div class="row">
           <iron-icon icon="{{item.preview}}" class="clickable" on-click="open"></iron-icon>
           <span class="clickable nameDisplay" on-click="open">{{item.name}}</span>
@@ -165,9 +165,9 @@ Example:
       files: {
         type: Array,
         notify: true,
-        value: []
+        value: [],
+        observer: "_filesChanged"
       },
-
     },
 
     ready: function() {
@@ -178,6 +178,27 @@ Example:
           closeMenu();
         }
       }, true);
+    },
+    
+    /**
+     * `_filesChanged` is called when the files are updated and backs up the files array
+    */
+    _filesChanged: function() {
+      this._files = this.files.slice(0);
+      this.filter(this._keyword || "");
+    },
+    
+    /**
+     * `filter` filters the files by name against a keyword
+     *
+     * @param {string} a keyword to filter by
+    */
+    filter: function(keyword) {
+      keyword = keyword.trim() || "";
+      this._keyword = keyword;
+      this._files = this.files.filter(function(item){
+        return item.name.toLowerCase().indexOf(keyword) == 0;
+      });
     },
     
     /**

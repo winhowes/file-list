@@ -26,6 +26,9 @@ This code may only be used under the MIT license found at https://github.com/win
     <p>An example of <code>&lt;file-list&gt;</code>:</p>
 
     <div class="container">
+      <label for="search">
+        Search: <input type="text" placeholder="keyword" id="search">
+      </label>
       <h2>File List:</h2>
       <file-list></file-list>
     </div>
@@ -42,7 +45,13 @@ This code may only be used under the MIT license found at https://github.com/win
         kind: "pdf",
         dateModified: (new Date("2014-02-01")).toLocaleString()
       }];
-      var file = document.querySelector("file-list").setAttribute("files", JSON.stringify(files));
+      var file = document.querySelector("file-list")
+      
+      file.setAttribute("files", JSON.stringify(files));
+      
+      document.getElementById("search").addEventListener("input", function(){
+        file.filter(document.getElementById("search").value);
+      });
     </script>
   </body>
 </html>
