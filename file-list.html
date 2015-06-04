@@ -179,9 +179,47 @@ Example:
         }
       }, true);
     },
+    
+    /**
+     * The `open` event is fired whenever `open` is called.
+     *
+     * @event open
+    */
+    
+    /**
+     * The `share` event is fired whenever `share` is called.
+     *
+     * @event share
+    */
+    
+    /**
+     * The `download` event is fired whenever `download` is called.
+     *
+     * @event download
+    */
+    
+    /**
+     * The `rename` event is fired whenever `saveRename` is called and actual rename has occurred
+     *
+     * @event rename
+    */
+    
+    /**
+     * The `move` event is fired whenever `move` is called.
+     *
+     * @event move
+    */
+    
+    /**
+     * The `delete` event is fired whenever `delete` is called.
+     *
+     * @event delete
+    */
 
     /**
      * `open` is called when a file is clicked and fires a open event
+     *
+     * @param {string} a polymer event object.
     */
     open: function(e) {
       this.fire("open", e.model.__data__.item)
@@ -189,6 +227,8 @@ Example:
 
     /**
      * `share` is called when a file's share button is clicked and fires a share event
+     *
+     * @param {string} a polymer event object.
     */
     share: function(e) {
       this.fire("share", e.model.__data__.item)
@@ -196,6 +236,8 @@ Example:
 
     /**
      * `download` is called when a file's download button is clicked and fires a download event
+     *
+     * @param {string} a polymer event object.
     */
     download: function(e) {
       this.fire("download", e.model.__data__.item)
@@ -203,6 +245,8 @@ Example:
     
     /**
      * `saveRename` fires an event with the newly renamed file if the file was indeed renamed
+     *
+     * @param {string} a polymer event object.
     */
     saveRename: function(e) {
       if (e.keyCode && e.keyCode != 27 && e.keyCode != 13) {
@@ -240,6 +284,8 @@ Example:
     
     /**
      * `rename` is called when a file's rename button is clicked and prepares for the file to be renamed
+     *
+     * @param {string} a polymer event object.
     */
     rename: function(e) {
       var display, edit, row = this._getParentRow(e.target);
@@ -263,6 +309,8 @@ Example:
     
     /**
      * `move` is called when a file's move button is clicked and fires a move event
+     *
+     * @param {string} a polymer event object.
     */
     move: function(e) {
       this.fire("move", e.model.__data__.item)
@@ -270,6 +318,8 @@ Example:
     
     /**
      * `delete` is called when a file's delete button is clicked and fires a delete event
+     *
+     * @param {string} a polymer event object.
     */
     delete: function(e) {
       this.fire("delete", e.model.__data__.item)
@@ -277,6 +327,8 @@ Example:
 
     /**
      * `openMenu` is called when a file's open menu button is clicked
+     *
+     * @param {string} a polymer event object.
     */
     openMenu: function(e) {
       e.stopPropagation();
@@ -290,6 +342,8 @@ Example:
     
     /**
      * `closeMenu` closes a file's menu
+     *
+     * @param {string} a polymer event object.
     */
     closeMenu: function(e) {
       if(this.openedMenu){
@@ -300,13 +354,20 @@ Example:
     
     /**
      * `_hasClass` returns whether or not an element has a particular class
+     * 
+     * @param {htmlElement} an html element to check.
+     * @param {string} the class name to check.
+     * @return {boolean} a polymer event object.
     */
-    _hasClass: function(element, cls) {
-      return (' ' + element.className + ' ').indexOf(' ' + cls + ' ') > -1;
+    _hasClass: function(element, className) {
+      return (' ' + element.className + ' ').indexOf(' ' + className + ' ') > -1;
     },
     
     /**
      * `_getParentRow` returns the parent row for a node
+     * 
+     * @param {htmlElement} an html element for which to get the parent row.
+     * @return {htmlElement} the html element of the parent row.
     */
     _getParentRow: function(node) {
       while(node.parentNode && !this._hasClass(node, "row")){

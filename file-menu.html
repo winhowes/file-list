@@ -44,16 +44,26 @@ Example:
 
     properties: {
       
+      /**
+       * `opened` indicates the the dropdown is opened.
+      */
       opened: {
         type: Boolean,
         value: false
       },
       
+      /**
+       * `opening` indicates the the dropdown is in the process of opening.
+      */
       opening: {
         type: Boolean,
         value: false
       },
       
+      
+      /**
+       * `animationConfig` is a configuration object for the dropdown's animations.
+      */
       animationConfig: {
         type: Object,
         value: function() {
@@ -75,6 +85,9 @@ Example:
       'neon-animation-finish': '_onAnimationFinish'
     },
 
+    /**
+      * `_onAnimationFinish` is callback for when an animation completes.
+    */
     _onAnimationFinish: function() {
       if (this.opening) {
         this.opening = false;
@@ -83,6 +96,10 @@ Example:
       }
     },
 
+    
+    /**
+      * `show` shows the dropdown menu.
+    */
     show: function() {
       if(!this.opened && !this.opening){
         this.opening = true;
@@ -91,6 +108,9 @@ Example:
       }
     },
 
+    /**
+      * `hide` hides the dropdown menu.
+    */
     hide: function() {
       if(!this.opening){
         this.opened = false;
