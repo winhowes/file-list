@@ -298,7 +298,13 @@ Example:
       
       var newName = edit.children[0].value.trim();
       if (newName && newName != display.textContent.trim()){
-        display.textContent = newName;
+        for(i=0; i < this.files.length; i++) {
+          if(this.files[i].name == display.textContent) {
+            this.files[i].name = newName;
+            this._filesChanged();
+            break;
+          }
+        }
         this.fire("rename", e.model.__data__.item)
       }
     },
