@@ -275,8 +275,8 @@ Example:
         return;
       }
       
-      var newName = edit.children[0].value;
-      if (newName != display.textContent){
+      var newName = edit.children[0].value.trim();
+      if (newName && newName != display.textContent.trim()){
         display.textContent = newName;
         this.fire("rename", e.model.__data__.item)
       }
