@@ -1,0 +1,35 @@
+<!doctype html>
+<!--
+@license
+Copyright (c) 2015 Winston Howes. All rights reserved.
+This code may only be used under the MIT license found at https://github.com/winhowes/file-list/blob/master/LICENSE
+-->
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+
+    <!-- Step 1: import the element to test -->
+    <link rel="import" href="../file-list.html">
+  </head>
+  <body>
+
+    <!-- You can use the document as a place to set up your fixtures. -->
+    <file-list files="[]"></file-list>
+
+    <script>
+      var myEl = document.querySelector('file-list');
+
+      suite('<file-list>', function() {
+
+        test('defines the "files" property', function() {
+          assert.deepEqual(myEl.files, []);
+        });
+      });
+    </script>
+
+  </body>
+</html>

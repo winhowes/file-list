@@ -1,0 +1,319 @@
+<!--
+@license
+Copyright (c) 2015 Winston Howes. All rights reserved.
+This code may only be used under the MIT license found at https://github.com/winhowes/file-list/blob/master/LICENSE
+-->
+<link rel="import" href="../polymer/polymer.html">
+
+<!--
+An element creating a searchable, sortable, list of files.
+
+Example:
+
+    <file-list></file-list>
+
+@demo
+-->
+<link rel="import" href="../paper-material/paper-material.html">
+<link rel="import" href="../iron-icons/iron-icons.html">
+<link rel="import" href="../paper-button/paper-button.html">
+<link rel="import" href="../paper-icon-button/paper-icon-button.html">
+<link rel="import" href="file-menu.html">
+
+<dom-module id="file-list">
+
+  <style>
+    paper-material {
+      display: block;
+      background-color: #fff;
+    }
+    
+    .row {
+      display: flex;
+      position: relative;
+      padding: 10px;
+      line-height: 30px;
+    }
+    
+    .row:not(:last-of-type) {
+      border-bottom: 1px solid #eee;
+    }
+    
+    .row:hover,
+    .row.hovered {
+      background-color: #fafafa;
+    }
+    
+    .hidden {
+      display: none;
+      position: absolute;
+      right: 0px;
+      top: 0px;
+      bottom: 0px;
+      width: 140px;
+      text-align: right;
+      padding-right: 10px;
+      color: #fff;
+      background-color: #1f8dd6;
+    }
+    
+    .row:hover .hidden,
+    .row.hovered .hidden {
+      display: block;
+    }
+    
+    .row.hovered {
+      z-index: 1;
+    }
+    
+    .row iron-icon {
+      margin: 0 10px;
+    }
+    
+    .row span {
+      flex: 1 30%;
+    }
+    
+    .clickable {
+      cursor: pointer;
+    }
+    
+    .clickable:hover {
+      text-decoration: underline;
+    }
+    
+    .nameEdit {
+      display: none;
+    }
+    
+    file-menu {
+      color: #222;
+      width: 140px;
+      position: absolute;
+      top: 3px;
+      right: 10px;
+      text-align: left;
+    }
+    
+    file-menu paper-material {
+      padding: 5px 0px;
+    }
+    
+    file-menu div {
+      cursor: pointer;
+      padding: 0px 5px;
+    }
+    
+    file-menu div:hover {
+      background-color: #eee;
+    }
+  </style>
+
+  <template>
+    <paper-material>
+      <template is="dom-repeat" items="{{files}}">
+        <div class="row">
+          <iron-icon icon="{{item.preview}}" class="clickable" on-click="open"></iron-icon>
+          <span class="clickable nameDisplay" on-click="open">{{item.name}}</span>
+          <span class="nameEdit">
+            <input type="text" value="{{item.name}}" on-blur="saveRename" on-keydown="saveRename">
+          </span>
+          <span>{{item.kind}}</span>
+          <span>{{item.dateModified}}</span>
+          <div class="hidden">
+            <paper-button on-click="share">Share</paper-button>
+            <paper-icon-button icon="more-vert" on-click="openMenu"></paper-icon-button>
+            <file-menu>
+              <paper-material elevation="2">
+                <div on-click="share">
+                  <iron-icon icon="link"></iron-icon> Share...
+                </div>
+                <div on-click="download">
+                  <iron-icon icon="file-download"></iron-icon> Download
+                </div>
+                <div on-click="rename">
+                  <iron-icon icon="create"></iron-icon> Rename
+                </div>
+                <div on-click="move">
+                  <iron-icon icon="flip-to-front"></iron-icon> Move...
+                </div>
+                <div on-click="delete">
+                  <iron-icon icon="delete"></iron-icon> Delete...
+                </div>
+              </paper-material>
+            </file-menu>
+          </div>
+        </div>
+      </template>
+    </paper-material>
+  </template>
+
+</dom-module>
+
+<script>
+
+  Polymer({
+
+    is: 'file-list',
+
+    properties: {
+      /**
+       * An array of file objects:
+       *
+       * @type [{preview: string, name: string, kind: string, dateModified: string}, ...]
+       */
+      files: {
+        type: Array,
+        notify: true,
+        value: []
+      },
+
+    },
+
+    ready: function() {
+      var closeMenu = this.closeMenu.bind(this);
+      document.addEventListener("click", closeMenu, true);
+      document.addEventListener("keydown", function(e){
+        if (e.keyCode == 27) {
+          closeMenu();
+        }
+      }, true);
+    },
+
+    /**
+     * `open` is called when a file is clicked and fires a open event
+    */
+    open: function(e) {
+      this.fire("open", e.model.__data__.item)
+    },
+
+    /**
+     * `share` is called when a file's share button is clicked and fires a share event
+    */
+    share: function(e) {
+      this.fire("share", e.model.__data__.item)
+    },
+
+    /**
+     * `download` is called when a file's download button is clicked and fires a download event
+    */
+    download: function(e) {
+      this.fire("download", e.model.__data__.item)
+    },
+    
+    /**
+     * `saveRename` fires an event with the newly renamed file if the file was indeed renamed
+    */
+    saveRename: function(e) {
+      if (e.keyCode && e.keyCode != 27 && e.keyCode != 13) {
+        return;
+      }
+      
+      var display, edit, row = this._getParentRow(e.target);
+      for (var i = 0; i < row.childElementCount; i++) {
+          if (this._hasClass(row.children[i], "nameDisplay")) {
+            display = row.children[i];
+            i++;
+          }
+          if (this._hasClass(row.children[i], "nameEdit")) {
+            edit = row.children[i];
+          }
+          if (edit && display) {
+            break;
+          }
+      }
+      
+      display.style.display = '';
+      edit.style.display = '';
+      
+      if (e.keyCode && e.keyCode == 27) {
+        edit.children[0].value = display.textContent;
+        return;
+      }
+      
+      var newName = edit.children[0].value;
+      if (newName != display.textContent){
+        display.textContent = newName;
+        this.fire("rename", e.model.__data__.item)
+      }
+    },
+    
+    /**
+     * `rename` is called when a file's rename button is clicked and prepares for the file to be renamed
+    */
+    rename: function(e) {
+      var display, edit, row = this._getParentRow(e.target);
+      for (var i = 0; i < row.childElementCount; i++) {
+          if (this._hasClass(row.children[i], "nameDisplay")) {
+            display = row.children[i];
+            i++;
+          }
+          if (this._hasClass(row.children[i], "nameEdit")) {
+            edit = row.children[i];
+          }
+          if (edit && display) {
+            break;
+          }
+      }
+      display.style.display = 'none';
+      edit.style.display = 'inline';
+      edit.children[0].focus();
+      edit.children[0].select();
+    },
+    
+    /**
+     * `move` is called when a file's move button is clicked and fires a move event
+    */
+    move: function(e) {
+      this.fire("move", e.model.__data__.item)
+    },
+    
+    /**
+     * `delete` is called when a file's delete button is clicked and fires a delete event
+    */
+    delete: function(e) {
+      this.fire("delete", e.model.__data__.item)
+    },
+
+    /**
+     * `openMenu` is called when a file's open menu button is clicked
+    */
+    openMenu: function(e) {
+      e.stopPropagation();
+      this.closeMenu();
+      this.openedMenu = e.target.parentNode.nextElementSibling;
+      this.openedMenu.show();
+      var row = this._getParentRow(this.openedMenu);
+      this.toggleClass("hovered", false, this.$$(".hovered"));
+      this.toggleClass("hovered", true, row);
+    },
+    
+    /**
+     * `closeMenu` closes a file's menu
+    */
+    closeMenu: function(e) {
+      if(this.openedMenu){
+        this.toggleClass("hovered", false, this.$$(".hovered"));
+        this.openedMenu.hide();
+      }
+    },
+    
+    /**
+     * `_hasClass` returns whether or not an element has a particular class
+    */
+    _hasClass: function(element, cls) {
+      return (' ' + element.className + ' ').indexOf(' ' + cls + ' ') > -1;
+    },
+    
+    /**
+     * `_getParentRow` returns the parent row for a node
+    */
+    _getParentRow: function(node) {
+      while(node.parentNode && !this._hasClass(node, "row")){
+        node = node.parentNode;
+      }
+      return node;
+    }
+  });
+
+</script>
