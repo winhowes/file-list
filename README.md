@@ -2,6 +2,8 @@
 
 This repo includes two elements which can be used for making a list of files with some pre-defined functionality such as renaming, moving, deleting, opening and sharing.
 
+Check out the demo and docs here: https://winhowes.github.io/file-list/components/file-list/.
+
 
 # Elements
 
