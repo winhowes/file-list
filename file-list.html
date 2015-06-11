@@ -194,7 +194,7 @@ Example:
      * @param {string} a keyword to filter by
     */
     filter: function(keyword) {
-      keyword = keyword.trim() || "";
+      keyword = keyword.trim().toLowerCase() || "";
       this._keyword = keyword;
       this._files = this.files.filter(function(item){
         return !item.name.toLowerCase().indexOf(keyword) || !item.type.toLowerCase().indexOf(keyword);
