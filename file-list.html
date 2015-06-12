@@ -82,6 +82,12 @@ Example:
       text-decoration: underline;
     }
     
+    .nameDisplay {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
     .nameEdit {
       display: none;
     }
@@ -114,7 +120,7 @@ Example:
       <template is="dom-repeat" items="{{_files}}">
         <div class="row">
           <iron-icon icon="{{item.preview}}" class="clickable" on-click="open"></iron-icon>
-          <span class="clickable nameDisplay" on-click="open">{{item.name}}</span>
+          <span class="clickable nameDisplay" title$="{{item.name}}" on-click="open">{{item.name}}</span>
           <span class="nameEdit">
             <input type="text" value="{{item.name}}" on-blur="saveRename" on-keydown="saveRename">
           </span>
