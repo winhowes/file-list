@@ -82,7 +82,7 @@ Example:
       text-decoration: underline;
     }
     
-    .nameDisplay {
+    .responsiveText {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -120,12 +120,12 @@ Example:
       <template is="dom-repeat" items="{{_files}}">
         <div class="row">
           <iron-icon icon="{{item.preview}}" class="clickable" on-click="open"></iron-icon>
-          <span class="clickable nameDisplay" title$="{{item.name}}" on-click="open">{{item.name}}</span>
+          <span class="clickable nameDisplay responsiveText" title$="{{item.name}}" on-click="open">{{item.name}}</span>
           <span class="nameEdit">
             <input type="text" value="{{item.name}}" on-blur="saveRename" on-keydown="saveRename">
           </span>
           <span>{{item.type}}</span>
-          <span>{{item.dateModified}}</span>
+          <span class="responsiveText">{{item.dateModified}}</span>
           <div class="hidden">
             <paper-button on-click="share">Share</paper-button>
             <paper-icon-button icon="more-vert" on-click="openMenu"></paper-icon-button>
