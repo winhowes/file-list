@@ -10,7 +10,7 @@ An element creating a searchable, sortable, list of files.
 
 Example:
 
-    <file-list></file-list>
+    <file-list>No Files</file-list>
 
 @demo
 -->
@@ -113,9 +113,16 @@ Example:
     file-menu div:hover {
       background-color: #eee;
     }
+    
+    [hidden] {
+      display: none;
+    }
   </style>
 
   <template>
+    <div hidden$="{{_hasElements(_files)}}">
+    <content></content>
+    </div>
     <paper-material>
       <template is="dom-repeat" items="{{_files}}">
         <div class="row">
@@ -173,7 +180,7 @@ Example:
         notify: true,
         value: [],
         observer: "_filesChanged"
-      },
+      }
     },
 
     ready: function() {
@@ -409,6 +416,15 @@ Example:
         node = node.parentNode;
       }
       return node;
+    },
+    
+    /**
+     * `_hasElements` returns whether or not an array is has elements
+     *
+     * @param {array}
+    */
+    _hasElements: function(arr) {
+      return arr.length !== 0;
     }
   });
 
