@@ -27,23 +27,23 @@ Example:
       display: block;
       background-color: #fff;
     }
-    
+
     .row {
       display: flex;
       position: relative;
       padding: 10px;
       line-height: 30px;
     }
-    
+
     .row:not(:last-of-type) {
       border-bottom: 1px solid #eee;
     }
-    
+
     .row:hover,
     .row.hovered {
       background-color: #fafafa;
     }
-    
+
     .hidden {
       display: none;
       position: absolute;
@@ -56,43 +56,43 @@ Example:
       color: #fff;
       background-color: #1f8dd6;
     }
-    
+
     .row:hover .hidden,
     .row.hovered .hidden {
       display: block;
     }
-    
+
     .row.hovered {
       z-index: 1;
     }
-    
+
     .row iron-icon {
       margin: 0 10px;
     }
-    
+
     .row span {
       flex: 1 30%;
     }
-    
+
     .clickable {
       cursor: pointer;
     }
-    
+
     .clickable:hover {
       text-decoration: underline;
     }
-    
+
     .responsiveText {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    
+
     .nameEdit {
       display: none;
       z-index: 1;
     }
-    
+
     file-menu {
       color: #222;
       width: 140px;
@@ -101,20 +101,20 @@ Example:
       right: 10px;
       text-align: left;
     }
-    
+
     file-menu paper-material {
       padding: 5px 0px;
     }
-    
+
     file-menu div {
       cursor: pointer;
       padding: 0px 5px;
     }
-    
+
     file-menu div:hover {
       background-color: #eee;
     }
-    
+
     [hidden] {
       display: none;
     }
@@ -193,15 +193,15 @@ Example:
         }
       }, true);
     },
-    
+
     /**
      * `_filesChanged` is called when the files are updated and backs up the files array
     */
     _filesChanged: function() {
-      this._files = this.files.slice(0);
+      this._files = this.files.slice(0).sort(this._comparator);
       this.filter(this._keyword || "");
     },
-    
+
     /**
      * `filter` filters the files by name against a keyword
      *
@@ -212,39 +212,39 @@ Example:
       this._keyword = keyword;
       this._files = this.files.filter(function(item){
         return !item.name.toLowerCase().indexOf(keyword) || !item.type.toLowerCase().indexOf(keyword);
-      });
+      }).sort(this._comparator);
     },
-    
+
     /**
      * The `open` event is fired whenever `open` is called.
      *
      * @event open
     */
-    
+
     /**
      * The `share` event is fired whenever `share` is called.
      *
      * @event share
     */
-    
+
     /**
      * The `download` event is fired whenever `download` is called.
      *
      * @event download
     */
-    
+
     /**
      * The `rename` event is fired whenever `saveRename` is called and actual rename has occurred
      *
      * @event rename
     */
-    
+
     /**
      * The `move` event is fired whenever `move` is called.
      *
      * @event move
     */
-    
+
     /**
      * The `delete` event is fired whenever `delete` is called.
      *
@@ -277,7 +277,7 @@ Example:
     download: function(e) {
       this.fire("download", e.model.__data__.item)
     },
-    
+
     /**
      * `saveRename` fires an event with the newly renamed file if the file was indeed renamed
      *
@@ -287,7 +287,7 @@ Example:
       if (e.keyCode && e.keyCode != 27 && e.keyCode != 13) {
         return;
       }
-      
+
       var display, edit, row = this._getParentRow(e.target);
       for (var i = 0; i < row.childElementCount; i++) {
           if (this._hasClass(row.children[i], "nameDisplay")) {
@@ -301,15 +301,15 @@ Example:
             break;
           }
       }
-      
+
       display.style.display = '';
       edit.style.display = '';
-      
+
       if (e.keyCode && e.keyCode == 27) {
         edit.children[0].value = display.textContent;
         return;
       }
-      
+
       var newName = edit.children[0].value.trim();
       if (newName && newName != display.textContent.trim()){
         for(i=0; i < this.files.length; i++) {
@@ -323,7 +323,7 @@ Example:
         this.fire("rename", e.model.__data__.item)
       }
     },
-    
+
     /**
      * `rename` is called when a file's rename button is clicked and prepares for the file to be renamed
      *
@@ -349,7 +349,7 @@ Example:
       edit.children[0].focus();
       edit.children[0].select();
     },
-    
+
     /**
      * `move` is called when a file's move button is clicked and fires a move event
      *
@@ -358,7 +358,7 @@ Example:
     move: function(e) {
       this.fire("move", e.model.__data__.item)
     },
-    
+
     /**
      * `delete` is called when a file's delete button is clicked and fires a delete event
      *
@@ -382,7 +382,7 @@ Example:
       this.toggleClass("hovered", false, this.$$(".hovered"));
       this.toggleClass("hovered", true, row);
     },
-    
+
     /**
      * `closeMenu` closes a file's menu
      *
@@ -394,10 +394,10 @@ Example:
         this.openedMenu.hide();
       }
     },
-    
+
     /**
      * `_hasClass` returns whether or not an element has a particular class
-     * 
+     *
      * @param {htmlElement} an html element to check.
      * @param {string} the class name to check.
      * @return {boolean} a polymer event object.
@@ -405,10 +405,10 @@ Example:
     _hasClass: function(element, className) {
       return (' ' + element.className + ' ').indexOf(' ' + className + ' ') > -1;
     },
-    
+
     /**
      * `_getParentRow` returns the parent row for a node
-     * 
+     *
      * @param {htmlElement} an html element for which to get the parent row.
      * @return {htmlElement} the html element of the parent row.
     */
@@ -418,7 +418,7 @@ Example:
       }
       return node;
     },
-    
+
     /**
      * `_hasElements` returns whether or not an array is has elements
      *
@@ -426,6 +426,20 @@ Example:
     */
     _hasElements: function(arr) {
       return arr.length !== 0;
+    },
+    /**
+     * `_comparator` compares two file objects for `Array.sort`.
+     * @param {file} a
+     * @param {file} b
+     */
+    _comparator: function(a, b) {
+      if(a.name < b.name) {
+          return -1;
+      } else if(b.name < a.name) {
+          return 1;
+      } else {
+          return 0;
+      }
     }
   });
 

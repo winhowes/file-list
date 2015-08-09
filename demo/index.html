@@ -40,15 +40,21 @@ This code may only be used under the MIT license found at https://github.com/win
         dateModified: (new Date).toLocaleString()
       },
       {
+        preview: "other description",
+        name: "zoo.png",
+        type: "png",
+        dateModified: (new Date("2013-08-15")).toLocaleString()
+      },
+      {
         preview: "description",
         name: "homework1.pdf",
         type: "pdf",
         dateModified: (new Date("2014-02-01")).toLocaleString()
       }];
       var file = document.querySelector("file-list")
-      
+
       file.setAttribute("files", JSON.stringify(files));
-      
+
       document.getElementById("search").addEventListener("input", function(){
         file.filter(document.getElementById("search").value);
       });
