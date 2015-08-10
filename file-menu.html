@@ -37,13 +37,13 @@ Example:
   Polymer({
 
     is: 'file-menu',
-    
+
     behaviors: [
       Polymer.NeonAnimationRunnerBehavior
     ],
 
     properties: {
-      
+
       /**
        * `opened` indicates the the dropdown is opened.
       */
@@ -51,7 +51,7 @@ Example:
         type: Boolean,
         value: false
       },
-      
+
       /**
        * `opening` indicates the the dropdown is in the process of opening.
       */
@@ -59,8 +59,7 @@ Example:
         type: Boolean,
         value: false
       },
-      
-      
+
       /**
        * `animationConfig` is a configuration object for the dropdown's animations.
       */
@@ -80,7 +79,7 @@ Example:
         }
       }
     },
-    
+
     listeners: {
       'neon-animation-finish': '_onAnimationFinish'
     },
@@ -96,7 +95,6 @@ Example:
       }
     },
 
-    
     /**
       * `show` shows the dropdown menu.
     */

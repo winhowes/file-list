@@ -19,6 +19,17 @@ This code may only be used under the MIT license found at https://github.com/win
         max-width: 992px;
         margin: 0px auto;
       }
+      h4 {
+        margin-bottom: 0px;
+        font-weight: normal;;
+      }
+      ul {
+        margin-top: 2px;
+        padding: 0px;
+      }
+      ul li {
+        list-style: none;
+      }
     </style>
   </head>
   <body>
@@ -26,6 +37,34 @@ This code may only be used under the MIT license found at https://github.com/win
     <p>An example of <code>&lt;file-list&gt;</code>:</p>
 
     <div class="container">
+      <button id="reverse">Reverse File List</button>
+      <h4>Sort On:</h4>
+      <ul id='sortOn'>
+        <li>
+          <label>
+            <input type="radio" name="sortOn" value="name" checked="checked">
+            Name
+          </label>
+        </li>
+        <li>
+          <label>
+            <input type="radio" name="sortOn" value="preview">
+            Preview Image
+          </label>
+        </li>
+        <li>
+          <label>
+            <input type="radio" name="sortOn" value="type">
+            Type
+          </label>
+        </li>
+        <li>
+          <label>
+            <input type="radio" name="sortOn" value="dateModified">
+            Date Modified
+          </label>
+        </li>
+      </ul>
       <label for="search">
         Search: <input type="text" placeholder="keyword" id="search">
       </label>
@@ -40,14 +79,14 @@ This code may only be used under the MIT license found at https://github.com/win
         dateModified: (new Date).toLocaleString()
       },
       {
-        preview: "other description",
+        preview: "description",
         name: "zoo.png",
         type: "png",
         dateModified: (new Date("2013-08-15")).toLocaleString()
       },
       {
         preview: "description",
-        name: "homework1.pdf",
+        name: "homework.pdf",
         type: "pdf",
         dateModified: (new Date("2014-02-01")).toLocaleString()
       }];
@@ -55,9 +94,17 @@ This code may only be used under the MIT license found at https://github.com/win
 
       file.setAttribute("files", JSON.stringify(files));
 
-      document.getElementById("search").addEventListener("input", function(){
-        file.filter(document.getElementById("search").value);
+      document.getElementById('search').addEventListener('input', function() {
+        file.filter(document.getElementById('search').value);
       });
+
+      document.getElementById('sortOn').addEventListener('change', function(e) {
+        file.sortOn = e.target.value;
+      });
+
+      document.getElementById('reverse').onclick = function() {
+        file.reverseSort();
+      }
     </script>
   </body>
 </html>
