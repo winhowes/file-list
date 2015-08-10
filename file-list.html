@@ -208,8 +208,7 @@ Example:
      * `_filesChanged` is called when the files are updated and backs up the files array
     */
     _filesChanged: function() {
-      this._files = this.files.slice(0);
-      this.filter(this._keyword || "");
+      this._sortOnChanged();
     },
 
     /**
@@ -226,7 +225,15 @@ Example:
         this.sortOn = 'name';
       }
       this.files = this.files.sort(this._comparator.bind(this));
-      this._filesChanged();
+      this._updateFileList();
+    },
+
+    /**
+     * `_updateFileList` updates the visible list of files
+    */
+    _updateFileList: function() {
+      this._files = this.files.slice(0);
+      this.filter(this._keyword || "");
     },
 
     /**
@@ -234,7 +241,7 @@ Example:
     */
     reverseSort: function() {
       this.files.reverse();
-      this._filesChanged();
+      this._updateFileList();
     },
 
     /**
@@ -351,7 +358,7 @@ Example:
           if(this.files[i].name == display.textContent) {
             e.model.set('item.name', newName);
             this.files[i].name = newName;
-            this._filesChanged();
+            this._updateFileList();
             break;
           }
         }
@@ -468,9 +475,9 @@ Example:
      * @param {file} b
      */
     _comparator: function(a, b) {
-      if(a[this.sortOn] < b[this.sortOn]) {
+      if(a[this.sortOn].toLowerCase() < b[this.sortOn].toLowerCase()) {
           return -1;
-      } else if(b[this.sortOn] < a[this.sortOn]) {
+      } else if(b[this.sortOn].toLowerCase() < a[this.sortOn].toLowerCase()) {
           return 1;
       } else {
           return 0;
