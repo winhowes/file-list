@@ -83,7 +83,7 @@ Example:
     }
 
     .responsiveText {
-      white-space: nowrap;
+      white-space: pre;
       overflow: hidden;
       text-overflow: ellipsis;
     }
@@ -191,6 +191,14 @@ Example:
         notify: true,
         value: 'name',
         observer: '_sortOnChanged'
+      },
+
+      /**
+       * _reversed: A boolean value indicating whether or not the list is reversed
+      */
+      _reversed: {
+        type: Boolean,
+        value: false
       }
     },
 
@@ -240,6 +248,7 @@ Example:
      * `reverseSort` reverses the files in the file list
     */
     reverseSort: function() {
+      this._reversed = !this._reversed;
       this.files.reverse();
       this._updateFileList();
     },
@@ -361,6 +370,10 @@ Example:
             this._updateFileList();
             break;
           }
+        }
+        this._sortOnChanged();
+        if (this._reversed) {
+          this.reverseSort();
         }
         this.fire("rename", e.model.__data__.item)
       }
