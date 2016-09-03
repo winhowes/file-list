@@ -1,0 +1,110 @@
+<!doctype html>
+<!--
+@license
+Copyright (c) 2015 Winston Howes. All rights reserved.
+This code may only be used under the MIT license found at https://github.com/winhowes/file-list/blob/master/LICENSE
+-->
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+    <title>file-list Demo</title>
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <link rel="import" href="../file-list.html">
+    <style>
+      body {
+        font-family: Arial;
+      }
+      .container {
+        max-width: 992px;
+        margin: 0px auto;
+      }
+      h4 {
+        margin-bottom: 0px;
+        font-weight: normal;;
+      }
+      ul {
+        margin-top: 2px;
+        padding: 0px;
+      }
+      ul li {
+        list-style: none;
+      }
+    </style>
+  </head>
+  <body>
+
+    <p>An example of <code>&lt;file-list&gt;</code>:</p>
+
+    <div class="container">
+      <button id="reverse">Reverse File List</button>
+      <h4>Sort On:</h4>
+      <ul id='sortOn'>
+        <li>
+          <label>
+            <input type="radio" name="sortOn" value="name" checked="checked">
+            Name
+          </label>
+        </li>
+        <li>
+          <label>
+            <input type="radio" name="sortOn" value="preview">
+            Preview Image
+          </label>
+        </li>
+        <li>
+          <label>
+            <input type="radio" name="sortOn" value="type">
+            Type
+          </label>
+        </li>
+        <li>
+          <label>
+            <input type="radio" name="sortOn" value="dateModified">
+            Date Modified
+          </label>
+        </li>
+      </ul>
+      <label for="search">
+        Search: <input type="text" placeholder="keyword" id="search">
+      </label>
+      <h2>File List:</h2>
+      <file-list>No Files</file-list>
+    </div>
+    <script>
+      var files = [{
+        preview: "folder",
+        name: "Documents",
+        type: "folder",
+        dateModified: (new Date).toLocaleString()
+      },
+      {
+        preview: "description",
+        name: "zoo.png",
+        type: "png",
+        dateModified: (new Date("2013-08-15")).toLocaleString()
+      },
+      {
+        preview: "description",
+        name: "homework.pdf",
+        type: "pdf",
+        dateModified: (new Date("2014-02-01")).toLocaleString()
+      }];
+      var file = document.querySelector("file-list")
+
+      file.setAttribute("files", JSON.stringify(files));
+
+      document.getElementById('search').addEventListener('input', function() {
+        file.filter(document.getElementById('search').value);
+      });
+
+      document.getElementById('sortOn').addEventListener('change', function(e) {
+        file.sortOn = e.target.value;
+      });
+
+      document.getElementById('reverse').onclick = function() {
+        file.reverseSort();
+      }
+    </script>
+  </body>
+</html>
