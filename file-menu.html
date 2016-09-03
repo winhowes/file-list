@@ -99,7 +99,7 @@ Example:
       * `show` shows the dropdown menu.
     */
     show: function() {
-      if(!this.opened && !this.opening){
+      if (!this.opened && !this.opening) {
         this.opening = true;
         this.playAnimation('entry');
         this.style.display = 'inline-block';
@@ -110,7 +110,7 @@ Example:
       * `hide` hides the dropdown menu.
     */
     hide: function() {
-      if(!this.opening){
+      if (!this.opening) {
         this.opened = false;
         this.style.display = '';
       }

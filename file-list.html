@@ -172,7 +172,7 @@ Example:
 
     properties: {
       /**
-       * An array of file objects
+       * `files` is an array of file objects.
        *
        * @type [{preview: string, name: string, type: string, dateModified: string}]
        */
@@ -186,7 +186,7 @@ Example:
       },
 
       /**
-       * The property to sort on
+       * `sortOn` is the file property to sort on.
       */
       sortOn: {
         type: String,
@@ -196,7 +196,7 @@ Example:
       },
 
       /**
-       * _reversed: A boolean value indicating whether or not the list is reversed
+       * `_reversed` is a boolean value indicating whether or not the list is reversed.
       */
       _reversed: {
         type: Boolean,
@@ -206,23 +206,23 @@ Example:
 
     ready: function() {
       var closeMenu = this.closeMenu.bind(this);
-      document.addEventListener("click", closeMenu, true);
-      document.addEventListener("keydown", function(e){
-        if (e.keyCode == 27) {
+      document.addEventListener('click', closeMenu, true);
+      document.addEventListener('keydown', function(e) {
+        if (e.keyCode === 27) {
           closeMenu();
         }
       }, true);
     },
 
     /**
-     * `_filesChanged` is called when the files are updated and backs up the files array
+     * `_filesChanged` is called when the files are updated and backs up the files array.
     */
     _filesChanged: function() {
       this._sortOnChanged();
     },
 
     /**
-     * `_sortOnChanged` is called when the sortOn property is changed
+     * `_sortOnChanged` is called when the sortOn property is changed.
     */
     _sortOnChanged: function() {
       var sortFields ={
@@ -239,15 +239,15 @@ Example:
     },
 
     /**
-     * `_updateFileList` updates the visible list of files
+     * `_updateFileList` updates the visible list of files.
     */
     _updateFileList: function() {
       this._files = this.files.slice(0);
-      this.filter(this._keyword || "");
+      this.filter(this._keyword || '');
     },
 
     /**
-     * `reverseSort` reverses the files in the file list
+     * `reverseSort` reverses the files in the file list.
     */
     reverseSort: function() {
       this._reversed = !this._reversed;
@@ -256,14 +256,14 @@ Example:
     },
 
     /**
-     * `filter` filters the files by name against a keyword
+     * `filter` filters the files by name against a keyword.
      *
-     * @param {string} a keyword to filter by
+     * @param {string} keyword The keyword on which to filter the files
     */
     filter: function(keyword) {
-      keyword = keyword.trim().toLowerCase() || "";
+      keyword = keyword.trim().toLowerCase() || '';
       this._keyword = keyword;
-      this._files = this.files.filter(function(item){
+      this._files = this.files.filter(function(item) {
         return !item.name.toLowerCase().indexOf(keyword) || !item.type.toLowerCase().indexOf(keyword);
       });
     },
@@ -287,7 +287,7 @@ Example:
     */
 
     /**
-     * The `rename` event is fired whenever `saveRename` is called and actual rename has occurred
+     * The `rename` event is fired whenever `saveRename` is called and actual rename has occurred.
      *
      * @event rename
     */
@@ -305,49 +305,49 @@ Example:
     */
 
     /**
-     * `open` is called when a file is clicked and fires a open event
+     * `open` is called when a file is clicked and fires a open event.
      *
-     * @param {string} a polymer event object.
+     * @param {object} e A polymer event object.
     */
     open: function(e) {
-      this.fire("open", e.model.__data__.item)
+      this.fire('open', e.model.__data__.item);
     },
 
     /**
-     * `share` is called when a file's share button is clicked and fires a share event
+     * `share` is called when a file's share button is clicked and fires a share event.
      *
-     * @param {string} a polymer event object.
+     * @param {object} e A polymer event object.
     */
     share: function(e) {
-      this.fire("share", e.model.__data__.item)
+      this.fire('share', e.model.__data__.item);
     },
 
     /**
-     * `download` is called when a file's download button is clicked and fires a download event
+     * `download` is called when a file's download button is clicked and fires a download event.
      *
-     * @param {string} a polymer event object.
+     * @param {object} e A polymer event object.
     */
     download: function(e) {
-      this.fire("download", e.model.__data__.item)
+      this.fire('download', e.model.__data__.item);
     },
 
     /**
-     * `saveRename` fires an event with the newly renamed file if the file was indeed renamed
+     * `saveRename` fires an event with the newly renamed file if the file was indeed renamed.
      *
-     * @param {string} a polymer event object.
+     * @param {object} e A keydown event object.
     */
     saveRename: function(e) {
-      if (e.keyCode && e.keyCode != 27 && e.keyCode != 13) {
+      if (e.keyCode && e.keyCode !== 27 && e.keyCode !== 13) {
         return;
       }
 
       var display, edit, row = this._getParentRow(e.target);
       for (var i = 0; i < row.childElementCount; i++) {
-          if (this._hasClass(row.children[i], "nameDisplay")) {
+          if (this._hasClass(row.children[i], 'nameDisplay')) {
             display = row.children[i];
             i++;
           }
-          if (this._hasClass(row.children[i], "nameEdit")) {
+          if (this._hasClass(row.children[i], 'nameEdit')) {
             edit = row.children[i];
           }
           if (edit && display) {
@@ -358,15 +358,15 @@ Example:
       display.style.display = '';
       edit.style.display = '';
 
-      if (e.keyCode && e.keyCode == 27) {
+      if (e.keyCode && e.keyCode === 27) {
         edit.children[0].value = display.textContent;
         return;
       }
 
       var newName = edit.children[0].value.trim();
-      if (newName && newName != display.textContent.trim()){
-        for(i=0; i < this.files.length; i++) {
-          if(this.files[i].name == display.textContent) {
+      if (newName && newName !== display.textContent.trim()) {
+        for (i = 0; i < this.files.length; i++) {
+          if (this.files[i].name === display.textContent) {
             e.model.set('item.name', newName);
             this.files[i].name = newName;
             this._updateFileList();
@@ -377,23 +377,23 @@ Example:
         if (this._reversed) {
           this.reverseSort();
         }
-        this.fire("rename", e.model.__data__.item)
+        this.fire('rename', e.model.__data__.item);
       }
     },
 
     /**
-     * `rename` is called when a file's rename button is clicked and prepares for the file to be renamed
+     * `rename` is called when a file's rename button is clicked and prepares for the file to be renamed.
      *
-     * @param {string} a polymer event object.
+     * @param {object} e A click event object.
     */
     rename: function(e) {
       var display, edit, row = this._getParentRow(e.target);
       for (var i = 0; i < row.childElementCount; i++) {
-          if (this._hasClass(row.children[i], "nameDisplay")) {
+          if (this._hasClass(row.children[i], 'nameDisplay')) {
             display = row.children[i];
             i++;
           }
-          if (this._hasClass(row.children[i], "nameEdit")) {
+          if (this._hasClass(row.children[i], 'nameEdit')) {
             edit = row.children[i];
           }
           if (edit && display) {
@@ -408,27 +408,27 @@ Example:
     },
 
     /**
-     * `move` is called when a file's move button is clicked and fires a move event
+     * `move` is called when a file's move button is clicked and fires a move event.
      *
-     * @param {string} a polymer event object.
+     * @param {object} e A polymer event object.
     */
     move: function(e) {
-      this.fire("move", e.model.__data__.item)
+      this.fire('move', e.model.__data__.item);
     },
 
     /**
-     * `delete` is called when a file's delete button is clicked and fires a delete event
+     * `delete` is called when a file's delete button is clicked and fires a delete event.
      *
-     * @param {string} a polymer event object.
+     * @param {object} e A polymer event object.
     */
     delete: function(e) {
-      this.fire("delete", e.model.__data__.item)
+      this.fire('delete', e.model.__data__.item);
     },
 
     /**
-     * `openMenu` is called when a file's open menu button is clicked
+     * `openMenu` is called when a file's open menu button is clicked.
      *
-     * @param {string} a polymer event object.
+     * @param {object} e A click event object.
     */
     openMenu: function(e) {
       e.stopPropagation();
@@ -436,63 +436,63 @@ Example:
       this.openedMenu = e.target.parentNode.nextElementSibling;
       this.openedMenu.show();
       var row = this._getParentRow(this.openedMenu);
-      this.toggleClass("hovered", false, this.$$(".hovered"));
-      this.toggleClass("hovered", true, row);
+      this.toggleClass('hovered', false, this.$$('.hovered'));
+      this.toggleClass('hovered', true, row);
     },
 
     /**
-     * `closeMenu` closes a file's menu
-     *
-     * @param {string} a polymer event object.
+     * `closeMenu` closes a file's menu.
     */
-    closeMenu: function(e) {
-      if(this.openedMenu){
-        this.toggleClass("hovered", false, this.$$(".hovered"));
+    closeMenu: function() {
+      if (this.openedMenu) {
+        this.toggleClass('hovered', false, this.$$('.hovered'));
         this.openedMenu.hide();
       }
     },
 
     /**
-     * `_hasClass` returns whether or not an element has a particular class
+     * `_hasClass` returns whether or not an element has a particular class.
      *
-     * @param {htmlElement} an html element to check.
-     * @param {string} the class name to check.
-     * @return {boolean} a polymer event object.
+     * @param {HTMLElement} element An html element to check.
+     * @param {string} className The class name to check.
+     * @return {boolean} whether or not the `element` has the `className`.
     */
     _hasClass: function(element, className) {
       return (' ' + element.className + ' ').indexOf(' ' + className + ' ') > -1;
     },
 
     /**
-     * `_getParentRow` returns the parent row for a node
+     * `_getParentRow` returns the parent row for a node.
      *
-     * @param {htmlElement} an html element for which to get the parent row.
-     * @return {htmlElement} the html element of the parent row.
+     * @param {HTMLElement} node An html element for which to get the parent row.
+     * @return {HTMLElement} the html element of the parent row.
     */
     _getParentRow: function(node) {
-      while(node.parentNode && !this._hasClass(node, "row")){
+      while (node.parentNode && !this._hasClass(node, 'row')) {
         node = node.parentNode;
       }
       return node;
     },
 
     /**
-     * `_hasElements` returns whether or not an array is has elements
+     * `_hasElements` returns whether or not an array is has elements.
      *
-     * @param {array}
+     * @param {array} arr An array
+     * @return {boolean} whether or not `arr` has any elements
     */
     _hasElements: function(arr) {
       return arr.length !== 0;
     },
     /**
      * `_comparator` compares two file objects for `Array.sort`.
-     * @param {file} a
-     * @param {file} b
+     * @param {file} a The first file element to compare
+     * @param {file} b The second file element to compare
+     * @return {number} A number indicating whether `a` is less than `b`, `b` is less than `a`, or equivalence
      */
     _comparator: function(a, b) {
-      if(a[this.sortOn].toLowerCase() < b[this.sortOn].toLowerCase()) {
+      if (a[this.sortOn].toLowerCase() < b[this.sortOn].toLowerCase()) {
           return -1;
-      } else if(b[this.sortOn].toLowerCase() < a[this.sortOn].toLowerCase()) {
+      } else if (b[this.sortOn].toLowerCase() < a[this.sortOn].toLowerCase()) {
           return 1;
       } else {
           return 0;
